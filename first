@@ -1,0 +1,44 @@
+from flask import Flask, render_template_string, request
+
+app = Flask(__name__)
+
+html_code = '''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome</h1>
+    <div id="welcomeMessage">Please enter your name:</div>
+    <form method="post">
+        <input type="text" name="name" placeholder="Your name">
+        <button type="submit">Submit</button>
+    </form>
+    <div id="greetingMessage">{{ greeting_message }}</div>
+</body>
+</html>
+'''
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    greeting_message = ''
+    if request.method == 'POST':
+        name = request.form['name']
+        if name.lower() == 'justin':
+            greeting_message = 'I love you'
+        else:
+            greeting_message = 'You are not Justin'
+    return render_template_string(html_code, greeting_message=greeting_message)
+
+if __name__ == '__main__':
+    app.run(debug=True)
